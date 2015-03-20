@@ -1,0 +1,14 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none;
+}
+
+.sort-handle {
+    cursor: move;
+}
+
+.sortable-grid {
+    padding-left: 0;
+}
+.sortable-grid li {
+    list-style: none;
+}

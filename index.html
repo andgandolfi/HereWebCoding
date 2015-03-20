@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"/>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="bower_components/fontawesome/css/font-awesome.css"/>
+    <link rel="stylesheet" href="//js.api.here.com/v3/3.0/mapsjs-ui.css" />
+    <link rel="stylesheet" href="style.css"/>
+
+    <script type="text/javascript" charset="UTF-8"
+            src="//js.api.here.com/v3/3.0/mapsjs-core.js"></script>
+    <script type="text/javascript" charset="UTF-8"
+            src="//js.api.here.com/v3/3.0/mapsjs-service.js"></script>
+    <script type="text/javascript" charset="UTF-8"
+            src="//js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+    <script type="text/javascript"  charset="UTF-8"
+            src="//js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
+</head>
+<body ng-controller="main as ctrl">
+
+<nav class="navbar navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">HERE Web Coding</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid" ng-cloak>
+    <div class="row">
+        <div class="col-sm-4">
+            <form ng-submit="ctrl.search(ctrl.searchText)">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" placeholder="Search HERE..." class="form-control" ng-model="ctrl.searchText" autofocus>
+                          <span class="input-group-btn">
+                                <input class="btn btn-default" type="submit" value="Go!"/>
+                          </span>
+                    </div>
+                </div>
+            </form>
+            <div>
+                <div class="alert alert-warning fade in" role="alert" ng-show="!ctrl.resultList.length && ctrl.searched">
+                    <button type="button" class="close" ng-click="ctrl.searched = false">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <p>No result found</p>
+                </div>
+                <div class="alert alert-info fade in" role="alert" ng-repeat="result in ctrl.resultList">
+                    <h4>{{ result.title }}</h4>
+                    <h5 ng-bind-html="result.vicinity"></h5>
+                    <button type="button" class="btn btn-primary" ng-click="ctrl.myItinerary.add(result)">Add</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8">
+            <div data-here-map="" settings="ctrl.settings" itinerary="ctrl.myItinerary" mode-of-transport="ctrl.modeOfTransport"
+                 style="width: 100%; height: 400px;" ></div>
+            <div style="position: relative;">
+                <div class="btn-group" role="group" style="position: absolute;top:0;right:5px;">
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" title="By Car"
+                            ng-class="{active: ctrl.modeOfTransport === 'car'}"
+                            ng-click="ctrl.modeOfTransport = 'car'">
+                        <span class="fa fa-car"></span>
+                    </button>
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" title="By Bus/Train"
+                            ng-class="{active: ctrl.modeOfTransport === 'publicTransport'}"
+                            ng-click="ctrl.modeOfTransport = 'publicTransport'">
+                        <span class="fa fa-bus"></span>
+                    </button>
+                    <button type="button" class="btn btn-default" data-toggle="tooltip" title="Walk!"
+                            ng-class="{active: ctrl.modeOfTransport === 'pedestrian'}"
+                            ng-click="ctrl.modeOfTransport = 'pedestrian'">
+                        <span class="fa fa-male"></span>
+                    </button>
+                </div>
+                <h2>My Itinerary</h2>
+                <div ng-hide="ctrl.myItinerary.waypoints.length">
+                    No Locations in your itinerary, add them using the search field on the left side.
+                </div>
+                <ul ui-sortable="ctrl.sortableOptions" ng-model="ctrl.myItinerary.waypoints" class="sortable-grid">
+                    <li class="alert alert-info fade in" role="alert" style="position:relative;" ng-repeat="item in ctrl.myItinerary.waypoints">
+                        <h4>
+                            <span class="glyphicon glyphicon-menu-hamburger sort-handle"></span>
+                            {{ item.title }}
+                        </h4>
+                        <h5 ng-bind-html="item.vicinity"></h5>
+                        <button type="button" style="position: absolute;top:5px;right:5px;" class="btn btn-danger" ng-click="ctrl.myItinerary.remove(item)">Remove</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="bower_components/underscore/underscore.js"></script>
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/jquery-ui/jquery-ui.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-ui-sortable/sortable.js"></script>
+<script src="app/here.js"></script>
+<script src="app/app.js"></script>
+
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+
+</body>
+</html>
